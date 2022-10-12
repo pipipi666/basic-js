@@ -20,13 +20,37 @@ const { NotImplementedError } = require('../extensions/index.js');
  * 
  */
 class VigenereCipheringMachine {
-  encrypt() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  constructor(isReverse) {
+    this.reverse = isReverse;
+    this.abc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
   }
-  decrypt() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  encrypt(str, word) {
+    if (!str || !word) throw new Error('Incorrect arguments!')
+    str = str.toUpperCase().split('');
+    word = word.toUpperCase().split('');
+    let wordIndex = 0;
+    for (let i = 0; i < str.length; i++) {
+      if (this.abc.includes(str[i])) {
+        str[i] = this.abc[(this.abc.indexOf(str[i]) + this.abc.indexOf(word[wordIndex % word.length])) % this.abc.length]
+        wordIndex++;
+      }
+    }
+    if (this.reverse === false) return str.reverse().join('')
+    return str.join('');
+  }
+  decrypt(str, word) {
+    if (!str || !word) throw new Error('Incorrect arguments!')
+    str = str.toUpperCase().split('');
+    word = word.toUpperCase().split('');
+    let wordIndex = 0;
+    for (let i = 0; i < str.length; i++) {
+      if (this.abc.includes(str[i])) {
+        str[i] = this.abc[(this.abc.indexOf(str[i]) - this.abc.indexOf(word[wordIndex % word.length]) + this.abc.length) % this.abc.length]
+        wordIndex++;
+      }
+    }
+    if (this.reverse === false) return str.reverse().join('')
+    return str.join('');
   }
 }
 
